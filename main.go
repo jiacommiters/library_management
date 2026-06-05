@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type buku struct {
 	id          int
@@ -41,6 +43,14 @@ func main() {
 			fmt.Scan(&action)
 		case "manage":
 			manageBuku(&dataBuku, &jumBuku)
+			fmt.Println("Mau Melakukan aksi apa lagi? ")
+			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
+			fmt.Scan(&action)
+		case "search":
+			fmt.Println("Buku apa yang ingin anda cari?")
+			var target string
+			fmt.Scan(&target)
+			searchBuku(&dataBuku, jumBuku, target)
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
 			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
 			fmt.Scan(&action)
@@ -203,5 +213,63 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 			fmt.Printf("\nMau manage lagi? (update/delete) atau ketik 'STOP' untuk keluar: ")
 			fmt.Scan(&action)
 		}
+	}
+}
+
+func sortingAsc(dataBuku *arrBuku, jumBuku int) {
+	var i, j int
+	var key buku
+
+	for i = 1; i < jumBuku; i++ {
+		key = dataBuku[i]
+		j = i - 1
+
+		for j >= 0 && dataBuku[j].id > key.id {
+			dataBuku[j+1] = dataBuku[j]
+			j = j - 1 
+		}
+
+		dataBuku[j+1] = key
+	}
+}
+
+func asortingDesc(dataBuku *arrBuku, jumBuku int) {
+	var i, j int
+	var key buku
+
+	for i = 1; i < jumBuku; i++ {
+		key = dataBuku[i]
+		j = i - 1
+
+		for j >= 0 && dataBuku[j].id < key.id {
+			dataBuku[j+1] = dataBuku[j]
+			j = j - 1 
+		}
+		
+		dataBuku[j+1] = key
+}
+
+}
+
+func searchBuku(dataBuku *arrBuku, jumBuku int, target string) {
+	var left, right int 
+	var mid int 
+	left, right = 0, jumBuku-1
+	mid = (left + right) / 2
+
+	for left <= right && (*dataBuku)[mid].judul != target {
+		if (*dataBuku)[mid].judul > (*dataBuku)[left].judul {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+		mid = (left + right) / 2
+	}
+
+	if (*dataBuku)[mid].judul == target {
+		fmt.Printf("Data Ditemukan\n%--25s%--25s%--25s%--25s%--25s%--25s%--25s%--25s\n", "ID", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
+		fmt.Printf("%--25d%--25s%--25s%--25s%--25d%--25s%--25d%--25s", dataBuku[mid].id, dataBuku[mid].judul, dataBuku[mid].penulis, dataBuku[mid].kategori, dataBuku[mid].tahunTerbit, dataBuku[mid].penerbit, dataBuku[mid].stok, dataBuku[mid].tersedia)
+	} else {
+		fmt.Printf("Buku dengan judul %s tidak ada", target)
 	}
 }
