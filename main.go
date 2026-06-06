@@ -37,7 +37,7 @@ func main() {
 			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
 			fmt.Scan(&action)
 		case "cek":
-			showBukuFunc(dataBuku, jumBuku)
+			showBukuFunc(&dataBuku, jumBuku)
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
 			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
 			fmt.Scan(&action)
@@ -50,6 +50,7 @@ func main() {
 			fmt.Println("Buku apa yang ingin anda cari?")
 			var target string
 			fmt.Scan(&target)
+			sortingAsc(&dataBuku, jumBuku)
 			searchBuku(&dataBuku, jumBuku, target)
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
 			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
@@ -64,54 +65,60 @@ func inputBukuFunc(databuku *arrBuku, jumBuku *int) {
 
 	for action != "STOP" {
 
-		databuku[*jumBuku].id = *jumBuku + 1
-
-		fmt.Println("Masukan Judul:")
-		fmt.Scan(&databuku[*jumBuku].judul)
-
-		fmt.Println("Masukkan penulis:")
-		fmt.Scan(&databuku[*jumBuku].penulis)
-
-		fmt.Println("Masukkan kategori:")
-		fmt.Scan(&databuku[*jumBuku].kategori)
-
-		fmt.Println("Masukkan tahun terbit:")
-		fmt.Scan(&databuku[*jumBuku].tahunTerbit)
-
-		fmt.Println("Masukkan penerbit:")
-		fmt.Scan(&databuku[*jumBuku].penerbit)
-
-		fmt.Println("Masukkan stok:")
-		fmt.Scan(&databuku[*jumBuku].stok)
-
-		if databuku[*jumBuku].stok == 0 {
-			databuku[*jumBuku].tersedia = "Tidak Tersedia"
+		if len(*databuku) >= 999 {
+			fmt.Println("Tidak dapat menambahkan buku lagi kapasitas sudah penuh!")
+			action = "STOP"
 		} else {
-			databuku[*jumBuku].tersedia = "Tersedia"
+
+			databuku[*jumBuku].id = *jumBuku + 1
+
+			fmt.Println("Masukan Judul:")
+			fmt.Scan(&databuku[*jumBuku].judul)
+
+			fmt.Println("Masukkan penulis:")
+			fmt.Scan(&databuku[*jumBuku].penulis)
+
+			fmt.Println("Masukkan kategori:")
+			fmt.Scan(&databuku[*jumBuku].kategori)
+
+			fmt.Println("Masukkan tahun terbit:")
+			fmt.Scan(&databuku[*jumBuku].tahunTerbit)
+
+			fmt.Println("Masukkan penerbit:")
+			fmt.Scan(&databuku[*jumBuku].penerbit)
+
+			fmt.Println("Masukkan stok:")
+			fmt.Scan(&databuku[*jumBuku].stok)
+
+			if databuku[*jumBuku].stok == 0 {
+				databuku[*jumBuku].tersedia = "Tidak Tersedia"
+			} else {
+				databuku[*jumBuku].tersedia = "Tersedia"
+			}
+
+			*jumBuku++
+
+			fmt.Println("\nInput Buku selesai, apakah ingin menambahkan lagi? (LANJUT/STOP)")
+			fmt.Scan(&action)
 		}
-
-		*jumBuku++
-
-		fmt.Println("\nInput Buku selesai, apakah ingin menambahkan lagi? (LANJUT/STOP)")
-		fmt.Scan(&action)
 	}
 }
 
-func showBukuFunc(databuku arrBuku, jumBuku int) {
+func showBukuFunc(databuku *arrBuku, jumBuku int) {
 	var i int
 	if jumBuku == 0 {
 		fmt.Println("Tidak ada buku yang tersedia")
 	} else {
-		fmt.Printf("%--25s %--25s %--25s %--25s %--25s %--25s, %--25s %--25s\n", "No", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
+		fmt.Printf("%-25s %-25s %-25s %-25s %-25s %-25s, %-25s %-25s\n", "No", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
 		for i = range jumBuku {
-			fmt.Printf("%--25d %--25s %--25s %--25s %--25d %--25s %--25d %--25s\n", databuku[i].id, databuku[i].judul, databuku[i].penulis, databuku[i].kategori, databuku[i].tahunTerbit, databuku[i].penerbit, databuku[i].stok, databuku[i].tersedia)
+			fmt.Printf("%-25d %-25s %-25s %-25s %-25d %-25s %-25d %-25s\n", databuku[i].id, databuku[i].judul, databuku[i].penulis, databuku[i].kategori, databuku[i].tahunTerbit, databuku[i].penerbit, databuku[i].stok, databuku[i].tersedia)
 		}
 	}
 }
 
 func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 	var action string
-	var idx int
+	var id int
 	var update string
 	var updatePart buku
 
@@ -128,19 +135,23 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 			switch action {
 			case "update":
 				fmt.Println("\nIngin update data buku dengan id berapa?")
-				showBukuFunc(*dataBuku, *jumBuku)
+				showBukuFunc(dataBuku, *jumBuku)
 				fmt.Printf("Masukkan ID: ")
-				fmt.Scan(&idx)
+				fmt.Scan(&id)
 
-				if idx < 1 || idx > *jumBuku {
-					fmt.Printf("Buku dengan id %d tidak ada\n", idx)
+				if id < 1 || id > *jumBuku {
+					fmt.Printf("Buku dengan id %d tidak ada\n", id)
 				} else {
 					var indexEdit int
-					indexEdit = idx - 1
-					fmt.Printf("Pada id %d ingin mengubah bagian mana?\n(judul/penulis/kategori/tahunterbit/penerbit/stok/statusketersediaan)\nPilihan: ", idx)
+					indexEdit = id - 1
+					fmt.Printf("Pada id %d ingin mengubah bagian mana?\n(judul/penulis/kategori/tahunterbit/penerbit/stok/statusketersediaan)\nPilihan: ", id)
 					fmt.Scan(&update)
 
 					switch update {
+					case "ID":
+						fmt.Print("Masukan ID baru: ")
+						fmt.Scan(&updatePart.id)
+						(*dataBuku)[indexEdit].id = updatePart.id
 					case "judul":
 						fmt.Print("Masukan Judul baru: ")
 						fmt.Scan(&updatePart.judul)
@@ -165,6 +176,11 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 						fmt.Print("Masukan stok baru: ")
 						fmt.Scan(&updatePart.stok)
 						(*dataBuku)[indexEdit].stok = updatePart.stok
+						if (*dataBuku)[indexEdit].stok > 0 {
+							(*dataBuku)[indexEdit].tersedia = "Tersedia"
+						} else {
+							(*dataBuku)[indexEdit].tersedia = "Tidak Tersedia"
+						}
 					case "statusketersediaan":
 						if (*dataBuku)[indexEdit].stok == 0 {
 							(*dataBuku)[indexEdit].tersedia = "Tidak Tersedia"
@@ -183,14 +199,14 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 			case "delete":
 				var indexHapus, indexTerakhir int
 				fmt.Println("\nIngin hapus data buku dengan id berapa?")
-				showBukuFunc(*dataBuku, *jumBuku)
+				showBukuFunc(dataBuku, *jumBuku)
 				fmt.Printf("Masukkan ID: ")
-				fmt.Scan(&idx)
+				fmt.Scan(&id)
 
-				if idx < 1 || idx > *jumBuku {
-					fmt.Printf("Buku dengan id %d tidak ada\n", idx)
+				if id < 1 || id > *jumBuku {
+					fmt.Printf("Buku dengan id %d tidak ada\n", id)
 				} else {
-					indexHapus = idx - 1
+					indexHapus = id - 1
 					indexTerakhir = *jumBuku - 1
 
 					(*dataBuku)[indexHapus] = (*dataBuku)[indexTerakhir]
@@ -205,6 +221,10 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 						fmt.Println("Database sekarang kosong.")
 						return
 					}
+				}
+
+				for id = range indexTerakhir {
+					dataBuku[id-1].id -= 1
 				}
 			default:
 				fmt.Println("Pilihan action tidak dikenal. Pilih (update), (delete), atau (STOP).")
@@ -226,14 +246,14 @@ func sortingAsc(dataBuku *arrBuku, jumBuku int) {
 
 		for j >= 0 && dataBuku[j].id > key.id {
 			dataBuku[j+1] = dataBuku[j]
-			j = j - 1 
+			j = j - 1
 		}
 
 		dataBuku[j+1] = key
 	}
 }
 
-func asortingDesc(dataBuku *arrBuku, jumBuku int) {
+func sortingDesc(dataBuku *arrBuku, jumBuku int) {
 	var i, j int
 	var key buku
 
@@ -243,33 +263,23 @@ func asortingDesc(dataBuku *arrBuku, jumBuku int) {
 
 		for j >= 0 && dataBuku[j].id < key.id {
 			dataBuku[j+1] = dataBuku[j]
-			j = j - 1 
+			j = j - 1
 		}
-		
+
 		dataBuku[j+1] = key
-}
+	}
 
 }
 
 func searchBuku(dataBuku *arrBuku, jumBuku int, target string) {
-	var left, right int 
-	var mid int 
-	left, right = 0, jumBuku-1
-	mid = (left + right) / 2
-
-	for left <= right && (*dataBuku)[mid].judul != target {
-		if (*dataBuku)[mid].judul > (*dataBuku)[left].judul {
-			left = mid + 1
-		} else {
-			right = mid - 1
+	var i int
+	for i = 0; i < jumBuku; i++ {
+		if (*dataBuku)[i].judul == target {
+			fmt.Printf("Data Ditemukan\n%-25s%-25s%-25s%-25s%-25s%-25s%-25s%-25s\n", "ID", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
+			fmt.Printf("%-25d%-25s%-25s%-25s%-25d%-25s%-25d%-25s", dataBuku[i].id, dataBuku[i].judul, dataBuku[i].penulis, dataBuku[i].kategori, dataBuku[i].tahunTerbit, dataBuku[i].penerbit, dataBuku[i].stok, dataBuku[i].tersedia)
+			return
 		}
-		mid = (left + right) / 2
-	}
-
-	if (*dataBuku)[mid].judul == target {
-		fmt.Printf("Data Ditemukan\n%--25s%--25s%--25s%--25s%--25s%--25s%--25s%--25s\n", "ID", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
-		fmt.Printf("%--25d%--25s%--25s%--25s%--25d%--25s%--25d%--25s", dataBuku[mid].id, dataBuku[mid].judul, dataBuku[mid].penulis, dataBuku[mid].kategori, dataBuku[mid].tahunTerbit, dataBuku[mid].penerbit, dataBuku[mid].stok, dataBuku[mid].tersedia)
-	} else {
 		fmt.Printf("Buku dengan judul %s tidak ada", target)
+
 	}
 }
