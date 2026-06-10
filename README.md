@@ -40,4 +40,4 @@ Proyek ini adalah sistem manajemen perpustakaan berbasis CLI (Command Line Inter
 ---
 
 **Repo:** https://github.com/jiacommiters/library_management  
-**Terakhir diperbarui:** (isi tanggal)
+**Terakhir diperbarui:** Rabu, 10 Juni 2026
