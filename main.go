@@ -54,6 +54,11 @@ func main() {
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
 			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
 			fmt.Scan(&action)
+		case "stats":
+			statsBuku(&dataBuku, jumBuku)
+			fmt.Println("Mau Melakukan aksi apa lagi? ")
+			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
+			fmt.Scan(&action)
 		}
 	}
 }
@@ -286,4 +291,78 @@ func searchBuku(dataBuku *arrBuku, jumBuku int, target string) {
 		fmt.Printf("Data Ditemukan\n%-25s%-25s%-25s%-25s%-25s%-25s%-25s%-25s\n", "ID", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
 		fmt.Printf("%-25d%-25s%-25s%-25s%-25d%-25s%-25d%-25s", dataBuku[found].id, dataBuku[found].judul, dataBuku[found].penulis, dataBuku[found].kategori, dataBuku[found].tahunTerbit, dataBuku[found].penerbit, dataBuku[found].stok, dataBuku[found].tersedia)
 	}
+}
+
+func statsBuku(dataBuku *arrBuku, jumBuku int) {
+    if jumBuku == 0 {
+        fmt.Println("Tidak ada data untuk statistik.")
+        return
+    }
+
+    var tersedia, tidakTersedia, totalStok int
+    var totalTahun, stok, tahun int
+    var tahunTertua, tahunTerbaru int
+    var judulTertua, judulTerbaru, judul string
+    var stokTerbanyak, stokTersedikit int
+    var judulTerbanyak, judulTersedikit string
+	var rataStok, rataTahun, persenTersedia float64
+
+    tahunTertua = (*dataBuku)[0].tahunTerbit
+    tahunTerbaru = (*dataBuku)[0].tahunTerbit
+    judulTertua = (*dataBuku)[0].judul
+    judulTerbaru = (*dataBuku)[0].judul
+    stokTerbanyak = (*dataBuku)[0].stok
+    stokTersedikit = (*dataBuku)[0].stok
+    judulTerbanyak = (*dataBuku)[0].judul
+    judulTersedikit = (*dataBuku)[0].judul
+
+    for i := 0; i < jumBuku; i++ {
+        stok = (*dataBuku)[i].stok
+        tahun = (*dataBuku)[i].tahunTerbit
+        judul = (*dataBuku)[i].judul
+
+        totalStok += stok
+        totalTahun += tahun
+
+        if stok > 0 {
+            tersedia++
+        } else {
+            tidakTersedia++
+        }
+
+        if tahun < tahunTertua {
+            tahunTertua = tahun
+            judulTertua = judul
+        }
+        if tahun > tahunTerbaru {
+            tahunTerbaru = tahun
+            judulTerbaru = judul
+        }
+
+        if stok > stokTerbanyak {
+            stokTerbanyak = stok
+            judulTerbanyak = judul
+        }
+        if stok < stokTersedikit {
+            stokTersedikit = stok
+            judulTersedikit = judul
+        }
+    }
+
+    rataStok = float64(totalStok) / float64(jumBuku)
+    rataTahun = float64(totalTahun) / float64(jumBuku)
+    persenTersedia = float64(tersedia) / float64(jumBuku) * 100
+
+    fmt.Println("\n========== STATISTIK PERPUSTAKAAN ==========")
+    fmt.Printf("Total Buku              : %d\n", jumBuku)
+    fmt.Printf("Buku Tersedia           : %d (%.1f%%)\n", tersedia, persenTersedia)
+    fmt.Printf("Buku Tidak Tersedia     : %d\n", tidakTersedia)
+    fmt.Printf("Total Stok              : %d eksemplar\n", totalStok)
+    fmt.Printf("Rata-rata Stok/Buku     : %.1f\n", rataStok)
+    fmt.Printf("Tahun Terbit Tertua     : %d (%s)\n", tahunTertua, judulTertua)
+    fmt.Printf("Tahun Terbit Terbaru    : %d (%s)\n", tahunTerbaru, judulTerbaru)
+    fmt.Printf("Rata-rata Tahun Terbit  : %.0f\n", rataTahun)
+    fmt.Printf("Stok Terbanyak          : %d (%s)\n", stokTerbanyak, judulTerbanyak)
+    fmt.Printf("Stok Tersedikit         : %d (%s)\n", stokTersedikit, judulTersedikit)
+    fmt.Println("============================================")
 }
