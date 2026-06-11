@@ -49,8 +49,15 @@ func main() {
 		case "search":
 			fmt.Println("Buku apa yang ingin anda cari?")
 			var target string
+			var jenisSort string
 			fmt.Scan(&target)
-			searchBuku(&dataBuku, jumBuku, target)
+			fmt.Print("Mau searching jenis apa?\n1. Linear Search\n2. Binary Search\nMasukan Jenis: ")
+			fmt.Scan(&jenisSort)
+			if  jenisSort == "1" || jenisSort == "2" {
+				searchBuku(&dataBuku, jumBuku, target, jenisSort )
+			} else {
+				fmt.Println("Jenis sort tidak di ketahui")
+			}
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
 			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
 			fmt.Scan(&action)
@@ -242,6 +249,8 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 	}
 }
 
+// Bagian Attala
+// Ubah jadi selection
 func sortingAsc(dataBuku *arrBuku, jumBuku int) {
 	var i, j int
 	var key buku
@@ -257,7 +266,9 @@ func sortingAsc(dataBuku *arrBuku, jumBuku int) {
 
 		dataBuku[j+1] = key
 	}
-}
+
+	// ubah jadi 	selecetion sort
+} 
 
 func sortingDesc(dataBuku *arrBuku, jumBuku int) {
 	var i, j int
@@ -274,14 +285,14 @@ func sortingDesc(dataBuku *arrBuku, jumBuku int) {
 
 		dataBuku[j+1] = key
 	}
-
 }
 
-func searchBuku(dataBuku *arrBuku, jumBuku int, target string) {
+func searchBuku(dataBuku *arrBuku, jumBuku int, target string, jenis string) {
 	var i int = 0
 	var found int = -1
 
-	for found == -1 && i < jumBuku {
+	if jenis == "1" {
+		for found == -1 && i < jumBuku {
 		if (*dataBuku)[i].judul == target {
 			found = i
 		}
@@ -294,7 +305,13 @@ func searchBuku(dataBuku *arrBuku, jumBuku int, target string) {
 		fmt.Printf("Data Ditemukan\n%-25s%-25s%-25s%-25s%-25s%-25s%-25s%-25s\n", "ID", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
 		fmt.Printf("%-25d%-25s%-25s%-25s%-25d%-25s%-25d%-25s", dataBuku[found].id, dataBuku[found].judul, dataBuku[found].penulis, dataBuku[found].kategori, dataBuku[found].tahunTerbit, dataBuku[found].penerbit, dataBuku[found].stok, dataBuku[found].tersedia)
 	}
+	} else if jenis == "2" {
+		sortingAsc(dataBuku, jumBuku)
+		// binary search
+	} 
 }
+
+// Tugas Attala
 
 func statsBuku(dataBuku *arrBuku, jumBuku int) {
 	if jumBuku == 0 {
