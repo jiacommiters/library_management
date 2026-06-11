@@ -16,11 +16,15 @@ Proyek ini adalah sistem manajemen perpustakaan berbasis CLI (Command Line Inter
 
 ---
 
+
+
+  
 ## Daftar Masalah yang Harus Diperbaiki
 
 ### 🔴 Kritis
 - [ ] **Menu "stats" tidak terhubung.** Fungsi `statsBuku` sudah dibuat, tetapi belum ada `case "stats"` di switch utama `main()`. Akibatnya, fitur statistik tidak bisa diakses sama sekali.
-  - *Cara perbaiki:* Tambahkan case "stats" di `main`, panggil `statsBuku(&dataBuku, jumBuku)`, lalu lanjutkan prompt aksi.
+  - *Cara perbaiki:* Tambahkan case "stats" di `main`, panggil `statsBuku(&dataBuku, jumBuku)`, lalu lanjutkan prompt aksi. 
+  - Done
 
 ### 🟡 Medium
 - [ ] **Input teks tidak bisa mengandung spasi.** Semua input string menggunakan `fmt.Scan` sehingga judul/penulis/penerbit hanya terbaca satu kata (contoh: "Laskar Pelangi" → "Laskar").
@@ -37,7 +41,14 @@ Proyek ini adalah sistem manajemen perpustakaan berbasis CLI (Command Line Inter
 - Data belum persisten (hilang saat program berhenti). Untuk pengujian berulang yang lebih mudah, disarankan menambahkan penyimpanan ke file atau database sederhana (misal SQLite) di versi selanjutnya.
 - Batasan 999 buku (array tetap) sudah diatasi dengan pengecekan kapasitas, tetapi jika ingin lebih fleksibel bisa diganti slice dinamis (`[]buku`).
 
+### Note ASPRAK
+  - dummy data 
+  - rapihin output
+  - lengkapin spesifikasi nya sorting nya sesuai denganspesisifikasi dokumen yang diberikan oleh dosen 
+  - hafalin sorting searching and logic nya 
+  - untuk mengakses menu nya mending pakai angka aja opsi 1, 2, 3, 4, 5.
+
 ---
 
 **Repo:** https://github.com/jiacommiters/library_management  
-**Terakhir diperbarui:** Rabu, 10 Juni 2026
+**Terakhir diperbarui:** Rabu, 11 Juni 2026
