@@ -50,5 +50,7 @@ Proyek ini adalah sistem manajemen perpustakaan berbasis CLI (Command Line Inter
 
 ---
 
+- Test atala
+
 **Repo:** https://github.com/jiacommiters/library_management  
 **Terakhir diperbarui:** Rabu, 11 Juni 2026

@@ -63,6 +63,8 @@ func main() {
 	}
 }
 
+// test attala
+
 func inputBukuFunc(databuku *arrBuku, jumBuku *int) {
 
 	var action string
