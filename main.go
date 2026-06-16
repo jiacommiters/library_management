@@ -25,7 +25,8 @@ func main() {
 
 	fmt.Println("Selamat Datang di Library")
 	fmt.Println("Mau Melakukan apa hari ini?")
-	fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nMau cari buku?(search)\nCek statistik buku?(stats)\nMasukkan Pilihan: ")
+	fmt.Printf(
+		"1. Input\n2. Cek Buku\n3. Manage Buku\n4. Search Buku\n5. Cek Statistik Buku\n6. Sortir Urutkan Buku")
 	fmt.Scan(&action)
 
 	for action != "stop" {
@@ -34,18 +35,21 @@ func main() {
 			fmt.Println("Ketik 'STOP' jika ingin stop input buku")
 			inputBukuFunc(&dataBuku, &jumBuku)
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
-			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
-			fmt.Scan(&action)
+fmt.Printf(
+		"1. Input\n2. Cek Buku\n3. Manage Buku\n4. Search Buku\n5. Cek Statistik Buku\n6. Sortir Urutkan Buku")
+				fmt.Scan(&action)
 		case "cek", "2":
 			showBukuFunc(&dataBuku, jumBuku)
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
-			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
-			fmt.Scan(&action)
+fmt.Printf(
+		"1. Input\n2. Cek Buku\n3. Manage Buku\n4. Search Buku\n5. Cek Statistik Buku\n6. Sortir Urutkan Buku")
+				fmt.Scan(&action)
 		case "manage", "3":
 			manageBuku(&dataBuku, &jumBuku)
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
-			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
-			fmt.Scan(&action)
+fmt.Printf(
+		"1. Input\n2. Cek Buku\n3. Manage Buku\n4. Search Buku\n5. Cek Statistik Buku\n6. Sortir Urutkan Buku")
+				fmt.Scan(&action)
 		case "search", "4":
 			var jenisSort string
 			fmt.Print("Mau searching jenis apa?\n1. Linear Search (Berdasarkan Judul)\n2. Binary Search (Berdasarkan Tahun)\nPilihan: ")
@@ -65,18 +69,32 @@ func main() {
 				fmt.Println("Jenis pencarian tidak diketahui:")
 			}
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
-			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
-			fmt.Scan(&action)
+fmt.Printf(
+		"1. Input\n2. Cek Buku\n3. Manage Buku\n4. Search Buku\n5. Cek Statistik Buku\n6. Sortir Urutkan Buku")
+				fmt.Scan(&action)
 		case "stats", "5":
 			statsBuku(&dataBuku, jumBuku)
 			fmt.Println("Mau Melakukan aksi apa lagi? ")
-			fmt.Printf("Mau Input?(input)\nMau manage data buku?(manage)\nMau cek status ketersediaan?(cek)\nCek statistik buku?(stats)\n")
-			fmt.Scan(&action)
+fmt.Printf(
+		"1. Input\n2. Cek Buku\n3. Manage Buku\n4. Search Buku\n5. Cek Statistik Buku\n6. Sortir Urutkan Buku")
+				fmt.Scan(&action)
+		case "sort", "6":
+			fmt.Println("Mau diurutkan secara Ascending atau Descending?\n1. Ascending\n2. Descending")
+			var jenisSort string
+			fmt.Scan(&jenisSort)
+			if jenisSort == "1" {
+				sortingAsc(&dataBuku, jumBuku)
+			} else if jenisSort == "2" {
+				sortingDesc(&dataBuku, jumBuku)
+			}
+			showBukuFunc(&dataBuku, jumBuku)
+			fmt.Println("Mau Melakukan aksi apa lagi? ")
+fmt.Printf(
+		"1. Input\n2. Cek Buku\n3. Manage Buku\n4. Search Buku\n5. Cek Statistik Buku\n6. Sortir Urutkan Buku")
+				fmt.Scan(&action)
 		}
 	}
 }
-
-// test attala
 
 func inputBukuFunc(databuku *arrBuku, jumBuku *int) {
 
@@ -129,7 +147,7 @@ func showBukuFunc(databuku *arrBuku, jumBuku int) {
 	if jumBuku == 0 {
 		fmt.Println("Tidak ada buku yang tersedia")
 	} else {
-		fmt.Printf("%-25s %-25s %-25s %-25s %-25s %-25s, %-25s %-25s\n", "No", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
+		fmt.Printf("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s\n", "No", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
 		for i = range jumBuku {
 			fmt.Printf("%-25d %-25s %-25s %-25s %-25d %-25s %-25d %-25s\n", databuku[i].id, databuku[i].judul, databuku[i].penulis, databuku[i].kategori, databuku[i].tahunTerbit, databuku[i].penerbit, databuku[i].stok, databuku[i].tersedia)
 		}
@@ -146,12 +164,11 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 		fmt.Println("Tidak ada buku yang tersedia, tidak bisa manage buku")
 		return
 	} else {
-
-		for action != "STOP" {
-			fmt.Printf("\nMau Manage apa di database kita?\n(update)\n(delete)\n")
+		fmt.Printf("\nMau Manage apa di database kita?\n(update)\n(delete)\n(STOP)\nPilihan Anda : ")
 			fmt.Printf("Pilihan Anda: ")
 			fmt.Scan(&action)
-
+		for action != "STOP" {
+	
 			switch action {
 			case "update":
 				fmt.Println("\nIngin update data buku dengan id berapa?")
@@ -255,8 +272,6 @@ func manageBuku(dataBuku *arrBuku, jumBuku *int) {
 	}
 }
 
-// Bagian Attala
-// Ubah jadi selection
 func sortingAsc(dataBuku *arrBuku, jumBuku int) {
 	var i, j, idxMin int
 	var temp buku
@@ -274,8 +289,6 @@ func sortingAsc(dataBuku *arrBuku, jumBuku int) {
 		dataBuku[i] = temp
 	}
 }
-
-// ubah jadi selecetion sort
 
 func sortingDesc(dataBuku *arrBuku, jumBuku int) {
 	var i, j, idxMax int
@@ -310,7 +323,7 @@ func searchBuku(dataBuku *arrBuku, jumBuku int, targetJudul string, targetTahun 
 			fmt.Printf("Buku dengan judul '%s' tidak ditemukan.\n", targetJudul)
 		} else {
 			fmt.Printf("\nData Ditemukan\n%-25s%-25s%-25s%-25s%-25s%-25s%-25s%-25s\n", "ID", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
-			fmt.Printf("%-25d%-25s%-25s%-25s%-25d%-25s%-25d%-25s\n", (*dataBuku)[found].id, (*dataBuku)[found].judul, (*dataBuku)[found].penulis, (*dataBuku)[found].kategori, (*dataBuku)[found].tahunTerbit, (*dataBuku)[found].penerbit, (*dataBuku)[found].stok, (*dataBuku)[found].tersedia)
+			fmt.Printf("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s\n", (*dataBuku)[found].id, (*dataBuku)[found].judul, (*dataBuku)[found].penulis, (*dataBuku)[found].kategori, (*dataBuku)[found].tahunTerbit, (*dataBuku)[found].penerbit, (*dataBuku)[found].stok, (*dataBuku)[found].tersedia)
 		}
 	} else if jenis == "2" {
 		sortingAsc(dataBuku, jumBuku)
@@ -328,18 +341,15 @@ func searchBuku(dataBuku *arrBuku, jumBuku int, targetJudul string, targetTahun 
 				right = mid - 1
 			}
 		}
+
 		if found == -1 {
 			fmt.Printf("Buku dengan tahun terbit %d tidak ditemukan.\n", targetTahun)
 		} else {
-			fmt.Printf("\nData Ditemukan\n%-25s-25s%-25s%-25s%-25s%-25s%-25s%-25s\n", "ID", "judul", "penulis", "kategori", "tahun Terbit", "penerbit", "stok", "tersedia")
-			fmt.Printf("%-25d%-25s%-25s%-25s%-25d%-25s%-25d%-25s\n", (*dataBuku)[found].id, (*dataBuku)[found].judul, (*dataBuku)[found].penulis, (*dataBuku)[found].kategori, (*dataBuku)[found].tahunTerbit, (*dataBuku)[found].penerbit, (*dataBuku)[found].stok, (*dataBuku)[found].tersedia)
+			fmt.Printf("\nData Ditemukan\n%-25s%-25s%-25s%-25s%-25s%-25s%-25s%-25s\n", "ID", "Judul", "Penulis", "Kategori", "Tahun Terbit", "Penerbit", "Stok", "Tersedia")
+			fmt.Printf("%-25s %-25s %-25s %-25s %-25s %-25s %-25s %-25s\n", (*dataBuku)[found].id, (*dataBuku)[found].judul, (*dataBuku)[found].penulis, (*dataBuku)[found].kategori, (*dataBuku)[found].tahunTerbit, (*dataBuku)[found].penerbit, (*dataBuku)[found].stok, (*dataBuku)[found].tersedia)
 		}
 	}
 }
-
-// binary search
-
-// Tugas Attala
 
 func statsBuku(dataBuku *arrBuku, jumBuku int) {
 	if jumBuku == 0 {
@@ -354,6 +364,8 @@ func statsBuku(dataBuku *arrBuku, jumBuku int) {
 	var stokTerbanyak, stokTersedikit int
 	var judulTerbanyak, judulTersedikit string
 	var rataStok, rataTahun, persenTersedia float64
+	var stok, tahun, i int
+	var judul string
 
 	tahunTertua = (*dataBuku)[0].tahunTerbit
 	tahunTerbaru = (*dataBuku)[0].tahunTerbit
@@ -364,10 +376,10 @@ func statsBuku(dataBuku *arrBuku, jumBuku int) {
 	judulTerbanyak = (*dataBuku)[0].judul
 	judulTersedikit = (*dataBuku)[0].judul
 
-	for i := 0; i < jumBuku; i++ {
-		stok := (*dataBuku)[i].stok
-		tahun := (*dataBuku)[i].tahunTerbit
-		judul := (*dataBuku)[i].judul
+	for i = 0; i < jumBuku; i++ {
+		stok = (*dataBuku)[i].stok
+		tahun = (*dataBuku)[i].tahunTerbit
+		judul = (*dataBuku)[i].judul
 
 		totalStok += stok
 		totalTahun += tahun
